@@ -180,20 +180,29 @@ def log():
 def ccaa():
 	directorio = str(request.form['directorio'])
 	directorio2 = str(request.form['directorio2'])
-	try:
-	 	path = 'C:\Users\jrglu\Desktop\EstructurasP1' + '\\'  + directorio2+'\\'+directorio 
-	 	os.mkdir(path);
-	 	return "CARPETA CREADA EXITOSAMENTE"
-	 	pass
-	except Exception as e:
-		return "CARPETA NO CREADA"
-	 	raise e
+	aux=ABgeneral.bus(ABgeneral.raiz,directorio2)
+	print("solicita: "+directorio2)
+	print(str(aux))
+	if aux!=None:
+		aux.nuevoArbol.insertar(directorio)
+    	aux.nuevoArbol.graficar(directorio2)
+    	try:
+    		path = 'C:\Users\jrglu\Desktop\EstructurasP1' + '\\CarpetaDrive'  + directorio2+'\\'+directorio
+    		os.mkdir(path);
+    		return "CARPETA CREADA EXITOSAMENTE"
+    		pass
+    	except Exception as e:
+			return "CARPETA NO CREADA"
+	 		raise e
+    	return "CARPETA CREADA EXITOSAMENTE"
+
+	
 
 @app.route('/crearCarpetaAndroidInicial', methods = ['POST'])
 def ccai():
 	directorio = str(request.form['directorio'])
 	try:
-	 	path = 'C:\Users\jrglu\Desktop\EstructurasP1' + '\\' + directorio  
+	 	path = 'C:\Users\jrglu\Desktop\EstructurasP1' + '\\CarpetaDrive' + directorio  
 	 	os.mkdir(path);
 	 	return "CARPETA CREADA EXITOSAMENTE"
 	 	pass
@@ -205,28 +214,47 @@ def ccai():
 def samc():
 	nombreCarpeta = str(request.form['nombreCarpeta'])
 	nombreArchivo = str(request.form['nombreArchivo'])
-	try:
-		file = open('C:\\Users\\jrglu\\Desktop\\EstructurasP1'  + '\\' + nombreCarpeta + '\\' + nombreArchivo + '.txt', "w")
-		file.close()
-		return "ARCHIVO SUBIDO A MI CARPETA"
-		pass
-	except Exception as e:
-		return "ARCHIVO NO SUBIDO"
-		raise e
+	aux=ABgeneral.bus(ABgeneral.raiz,nombreCarpeta)
+	print("solicita archivo: "+nombreCarpeta)
+	print(str(aux))
+	if aux!=None:
+		aux.avl.insertar(nombreArchivo)
+		try:
+			file = open('C:\\Users\\jrglu\\Desktop\\EstructurasP1'  + '\\CarpetaDrive' + nombreCarpeta + '\\' + nombreArchivo + '.txt', "w")
+			file.close()
+			return "ARCHIVO SUBIDO A MI CARPETA"
+			pass
+		except Exception as e:
+			return "ARCHIVO NO SUBIDO"
+			raise e
+		return "ARCHIVO SUBIDO A MI CARPETA"		
+	else:
+		return "invalido"
+    	
 
 @app.route('/subirArchivoACarpeta', methods = ['POST'])
 def saac():
 	carpetaUsuario = str(request.form['carpetaUsuario'])
 	nombreCarpeta = str(request.form['nombreCarpeta'])
 	nombreArchivo = str(request.form['nombreArchivo'])
-	try:
-		file = open('C:\\Users\\jrglu\\Desktop\\EstructurasP1' + '\\' + carpetaUsuario + '\\' + nombreCarpeta + '\\' + nombreArchivo + '.txt', "w")
-		file.close()
+	aux=ABgeneral.bus(ABgeneral.raiz,carpetaUsuario)
+	print("solicita archivo: "+carpetaUsuario)
+	print(str(aux))
+	if aux!=None:
+		aux.nuevoArbol.bus(aux.nuevoArbol.raiz,nombreCarpeta).Avl.insertar(nombreArchivo)
+		aux.nuevoArbol.bus(aux.nuevoArbol.raiz,nombreCarpeta).Avl.graficar(carpetaUsuario+nombreCarpeta)
+		try:
+			file = open('C:\\Users\\jrglu\\Desktop\\EstructurasP1' + '\\CarpetaDrive' + carpetaUsuario + '\\' + nombreCarpeta + '\\' + nombreArchivo + '.txt', "w")
+			file.close()
+			return "ARCHIVO SUBIDO A DICHA CARPETA"
+			pass
+		except Exception as e:
+			return "ARCHIVO NO SUBIDO"
+			raise e
 		return "ARCHIVO SUBIDO A DICHA CARPETA"
-		pass
-	except Exception as e:
+	else:
 		return "ARCHIVO NO SUBIDO"
-		raise e
+		
 
 @app.route('/hola') 
 def he():
